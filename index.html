@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="text-center">
+
+    <!-- Logo -->
+    <img src="{{ url_for('static', filename='images/logo.png') }}" 
+         alt="Harvest Assemblies Logo" 
+         class="img-fluid mb-4" 
+         style="width:10%;">
+
+    <!-- Welcome -->
+    <h2 class="display-5"><strong>Welcome to Harvest Assemblies of Christ Global Church</strong></h2>
+    <p class="lead">Join us every Sunday for worship, fellowship, and spiritual growth.</p>
+    <img src="{{ url_for('static', filename='images/church.jpg') }}" 
+         class="img-fluid rounded mb-4" 
+         alt="Church building" style="width:10%;">
+
+    <!-- Our Story -->
+    <section class="mt-5">
+        <div class="card bg-dark text-light shadow-lg">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Our Story</h2>
+                <p class="lead">
+                    Harvest Assemblies of Christ Global Church was founded in 2008 in the heart of Phase 5, a vibrant community seeking spiritual renewal and purpose. Under the divine calling and leadership of <strong>Apostle Malesela</strong>, the church began as a humble gathering of believers in a small hall, united by faith, prayer, and a vision for transformation.
+                </p>
+                <p>
+                    From its earliest days, the church has been a beacon of hope — preaching the gospel, nurturing families, and empowering youth through outreach, worship, and discipleship. What started with just a handful of passionate souls has grown into a thriving global ministry, touching lives across South Africa and beyond.
+                </p>
+                <p class="text-center mt-4">
+                    <strong>"The harvest is plentiful, but the laborers are few." — Matthew 9:37</strong>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values & Goals -->
+    <section class="mt-5">
+        <h2 class="mb-4">Our Values & Goals</h2>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Faith</h5>
+                        <p class="card-text">We are rooted in Christ, living by faith and spreading the gospel with boldness.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Community</h5>
+                        <p class="card-text">We nurture families, empower youth, and uplift our community through service and love.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Leadership</h5>
+                        <p class="card-text">We raise leaders who will impact nations, restore families, and carry the mission forward.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Preview -->
+    <section class="mt-5">
+        <h2 class="mb-4">Upcoming Events</h2>
+        {% if current_events %}
+            <div class="row">
+                {% for event in current_events[:3] %}
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <img src="{{ url_for('static', filename='uploads/posters/' ~ event.poster_filename) }}" 
+                             class="card-img-top" alt="{{ event.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ event.title }}</h5>
+                            <p class="card-text">{{ event.description[:100] }}...</p>
+                            <small class="text-muted">{{ event.start_date.strftime('%Y-%m-%d') }} - {{ event.end_date.strftime('%Y-%m-%d') }}</small><br>
+                            <a href="{{ url_for('events') }}" class="btn btn-outline-success mt-2">View All Events</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No upcoming events at the moment. <a href="{{ url_for('events') }}">View past events</a></p>
+        {% endif %}
+    </section>
+
+    <!-- Sermons Preview -->
+    <section class="mt-5">
+        <h2 class="mb-4">Recent Sermons</h2>
+        {% if sermons %}
+            <div class="row">
+                {% for filename in sermons[:3] %}
+                <div class="col-md-4 mb-3">
+                    {% if filename.endswith('.mp4') or filename.endswith('.webm') %}
+                        <video controls width="100%">
+                            <source src="{{ url_for('static', filename='uploads/sermons/' ~ filename) }}">
+                        </video>
+                    {% elif filename.endswith('.mp3') or filename.endswith('.wav') %}
+                        <audio controls>
+                            <source src="{{ url_for('static', filename='uploads/sermons/' ~ filename) }}">
+                        </audio>
+                    {% else %}
+                        <p><a href="{{ url_for('static', filename='uploads/sermons/' ~ filename) }}" target="_blank">{{ filename }}</a></p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No sermons uploaded yet. <a href="{{ url_for('sermons') }}">View all sermons</a></p>
+        {% endif %}
+        <a href="{{ url_for('sermons') }}" class="btn btn-outline-warning mt-3">Explore Sermons</a>
+    </section>
+
+    <!-- People Preview -->
+    <section class="mt-5">
+        <h2 class="mb-4">Meet Our Leaders</h2>
+        <div class="row">
+            {% if leaders %}
+                {% for leader in leaders[:3] %}
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <img src="{{ url_for('static', filename='images/people/' ~ leader.image_filename) }}" 
+                             class="card-img-top" alt="{{ leader.name }}" style="width:100%;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ leader.name }}</h5>
+                            <p class="card-text"><strong>{{ leader.position }}</strong></p>
+                            <p class="card-text"><em>"{{ leader.motto }}"</em></p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No leaders added yet. <a href="{{ url_for('people') }}">View all leaders</a></p>
+            {% endif %}
+        </div>
+        <a href="{{ url_for('people') }}" class="btn btn-outline-info mt-3">View Leaders</a>
+    </section>
+
+    <!-- Gallery Preview -->
+    <section class="mt-5">
+        <h2 class="mb-4">Glimpse of Our Community</h2>
+        
+        <a href="{{ url_for('gallery') }}" class="btn btn-outline-primary mt-3">View Full Gallery</a>
+    </section>
+
+</div>
+{% endblock %}

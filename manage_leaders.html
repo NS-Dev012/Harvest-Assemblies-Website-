@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Manage Leaders</h2>
+
+<form action="/upload_leader" method="POST" enctype="multipart/form-data" class="mb-4">
+    <input type="text" name="name" class="form-control mb-2" placeholder="Full Name" required>
+    <input type="text" name="position" class="form-control mb-2" placeholder="Position" required>
+    <input type="text" name="motto" class="form-control mb-2" placeholder="Motto" required>
+    <input type="text" name="phone" class="form-control mb-2" placeholder="Phone Number" required>
+    <input type="email" name="email" class="form-control mb-2" placeholder="Email Address" required>
+    <label>Upload Image:</label>
+    <input type="file" name="image" class="form-control mb-2" required>
+    <button type="submit" class="btn btn-info">Upload Leader</button>
+</form>
+
+<div class="row">
+    {% for leader in leaders %}
+    <div class="col-md-6 mb-4">
+        <div class="card bg-dark text-light shadow">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="{{ url_for('static', filename='images/people/' + leader.image_filename) }}" class="img-fluid rounded-start">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5>{{ leader.name }}</h5>
+                        <p><strong>{{ leader.position }}</strong></p>
+                        <p><em>"{{ leader.motto }}"</em></p>
+                        <p>{{ leader.phone }} | <a href="mailto:{{ leader.email }}" class="text-light">{{ leader.email }}</a></p>
+                        <form action="{{ url_for('delete_leader', leader_id=leader.id) }}" method="POST">
+                            <button type="submit" class="btn btn-sm btn-danger mt-2">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

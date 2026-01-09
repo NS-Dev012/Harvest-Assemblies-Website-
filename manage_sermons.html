@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Manage Sermons</h2>
+
+<form action="/upload_sermon" method="POST" enctype="multipart/form-data" class="mb-4">
+    <label>Sermon Title:</label>
+    <input type="text" name="title" class="form-control mb-2" required>
+    <label>Upload Sermon:</label>
+    <input type="file" name="sermon_file" class="form-control mb-2" required>
+    <button type="submit" class="btn btn-primary">Upload Sermon</button>
+</form>
+
+{% for filename in sermons %}
+<div class="mb-3">
+    {% if filename.endswith('.mp4') or filename.endswith('.webm') %}
+        <video controls width="300">
+            <source src="{{ url_for('static', filename='uploads/sermons/' + filename) }}">
+        </video>
+    {% elif filename.endswith('.mp3') or filename.endswith('.wav') %}
+        <audio controls>
+            <source src="{{ url_for('static', filename='uploads/sermons/' + filename) }}">
+        </audio>
+    {% else %}
+        <p><a href="{{ url_for('static', filename='uploads/sermons/' + filename) }}" target="_blank">{{ filename }}</a></p>
+    {% endif %}
+    <form action="{{ url_for('delete_sermon', filename=filename) }}" method="POST">
+        <button type="submit" class="btn btn-sm btn-danger mt-2">Delete</button>
+    </form>
+</div>
+{% else %}
+    <p>No sermons uploaded yet.</p>
+{% endfor %}
+{% endblock %}

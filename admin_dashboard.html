@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Admin Dashboard</h2>
+    <p class="lead">Welcome back, Admin. Choose a section to manage:</p>
+
+    <div class="list-group">
+        <a href="{{ url_for('manage_sermons') }}" class="list-group-item list-group-item-action">
+            🎤 Manage Sermons
+        </a>
+        <a href="{{ url_for('manage_events') }}" class="list-group-item list-group-item-action">
+            📅 Manage Events
+        </a>
+        <a href="{{ url_for('manage_leaders') }}" class="list-group-item list-group-item-action">
+            👥 Manage Leaders
+        </a>
+        <a href="{{ url_for('manage_gallery') }}" class="list-group-item list-group-item-action">
+            🖼️ Manage Gallery
+        </a>
+        <a href="{{ url_for('manage_messages') }}" class="list-group-item list-group-item-action">
+            📨 Manage Messages
+        </a>
+    </div>
+
+    <a href="{{ url_for('admin_logout') }}" class="btn btn-danger mt-4">Logout</a>
+</div>
+{% endblock %}
